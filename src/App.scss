@@ -1,0 +1,208 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Scroll Bar Customizaion */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+body {
+  min-height: 100vh;
+}
+
+h1 {
+  padding: 25px;
+  text-align: center;
+  font-size: 50px;
+}
+
+/* Add Form */
+.add-item {
+  padding: 10px;
+}
+
+.add-item form {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-item form input,
+.add-item form textarea {
+  width: 100%;
+  max-width: 500px;
+  min-width: 250px;
+  outline: none;
+
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+}
+
+.add-item form input:focus,
+.add-item form textarea:focus {
+  outline: 2px solid lightblue;
+}
+
+.add-item form textarea {
+  resize: vertical;
+  max-height: 300px;
+  min-height: 100px;
+}
+
+button.add-button {
+  margin-top: 15px;
+  padding: 10px;
+  font-weight: bold;
+  border: none;
+  color: white;
+  background: rgb(82, 181, 214);
+  border-radius: 5px;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+}
+
+button.add-button:hover {
+  transform: scale(1.1);
+}
+
+.empty-list-pragraph {
+  margin-top: 25px;
+  padding: 50px;
+  text-align: center;
+  color: gray;
+}
+
+.title {
+  font-weight: bold;
+  padding: 5px 10px;
+  background: #12121270;
+  display: inline-block;
+  border-radius: 10px;
+}
+
+.description {
+  text-align: center;
+  padding-inline-end: 15px;
+  padding-inline-start: 15px;
+  height: 90%;
+  overflow-y: auto;
+  white-space: break-spaces;
+  line-height: 20px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.trash-button,
+.color-button {
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 20px;
+  position: absolute;
+  cursor: pointer;
+  top: 10px;
+  right: 10px;
+}
+
+.color-button {
+  right: 40px;
+}
+
+img {
+  width: 100%;
+}
+
+.muuri {
+  margin-top: 25px;
+  position: relative;
+}
+
+.item {
+  position: absolute;
+  margin: 10px;
+  z-index: 1;
+  width: calc(100% / 4 - 20px);
+  cursor: grab;
+}
+
+.template-1 {
+  color: #000000;
+  background-color: aquamarine;
+}
+
+.item:active {
+  cursor: grabbing;
+}
+.item-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.color-picker-container {
+  position: absolute;
+  max-width: 100%;
+  z-index: 0;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+.color-picker-container.show {
+  z-index: 10;
+  opacity: 1;
+}
+.item-content .note {
+  box-shadow: 5px 5px 10px #12121270;
+  border-radius: 10px;
+  background: rgb(82, 181, 214);
+  padding: 25px 15px 15px;
+  height: 100%;
+  height: 200px;
+  max-height: 200px;
+  color: #121212;
+  overflow: hidden;
+}
+.muuri-item {
+  z-index: 1;
+}
+.muuri-item-dragging {
+  z-index: 3;
+}
+.muuri-item-releasing {
+  z-index: 2;
+}
+.muuri-item-hidden {
+  z-index: 0;
+}
+
+// -------- MAIN Printable --------
+
+#printable {
+  margin: 20px;
+  display: flex;
+  border: grey 1px dotted;
+}
