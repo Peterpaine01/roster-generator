@@ -29,10 +29,16 @@ body {
   min-height: 100vh;
 }
 
-h1 {
-  padding: 25px;
-  text-align: center;
-  font-size: 50px;
+.container {
+  padding: 40px 100px;
+}
+
+header {
+  h1 {
+    padding: 25px;
+    text-align: center;
+    font-size: 50px;
+  }
 }
 
 /* Add Form */
@@ -102,20 +108,6 @@ button.add-button:hover {
   border-radius: 10px;
 }
 
-.description {
-  text-align: center;
-  padding-inline-end: 15px;
-  padding-inline-start: 15px;
-  height: 90%;
-  overflow-y: auto;
-  white-space: break-spaces;
-  line-height: 20px;
-  font-size: 18px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .trash-button,
 .color-button {
   background: transparent;
@@ -136,31 +128,77 @@ img {
   width: 100%;
 }
 
-.muuri {
-  margin-top: 25px;
-  position: relative;
+// -------- MAIN Printable --------
+
+.printable {
+  margin-top: 60px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  border: grey 1px dotted;
+  box-shadow: 0px 0px 20px #12121239;
+  > div {
+    border: 1px solid red;
+  }
 }
+
+.format-a3 {
+  width: 100%;
+  aspect-ratio: 1/1.414;
+}
+
+.muuri {
+  position: relative;
+  padding: 40px;
+  width: 100%;
+}
+
+// -------- CARDS --------
 
 .item {
   position: absolute;
-  margin: 10px;
   z-index: 1;
-  width: calc(100% / 4 - 20px);
+  width: calc(100% / 5 - 20px);
+  aspect-ratio: 1/1.414;
   cursor: grab;
-}
-
-.template-1 {
-  color: #000000;
-  background-color: aquamarine;
+  margin: 10px;
 }
 
 .item:active {
   cursor: grabbing;
 }
-.item-content {
-  position: relative;
-  width: 100%;
-  height: 100%;
+
+.template-1 {
+  background-color: aquamarine;
+  //box-shadow: 5px 5px 10px #12121270;
+  border-radius: 10px;
+  color: #121212;
+  overflow: hidden;
+
+  .item-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  .photo-container {
+    background-color: #00000050;
+    width: 100%;
+    height: 100%;
+  }
+  .bottom-card {
+    //min-height: 55px;
+    padding: 5%;
+    text-align: center;
+  }
+  .position-container {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+  }
 }
 
 .color-picker-container {
@@ -175,17 +213,7 @@ img {
   z-index: 10;
   opacity: 1;
 }
-.item-content .note {
-  box-shadow: 5px 5px 10px #12121270;
-  border-radius: 10px;
-  background: rgb(82, 181, 214);
-  padding: 25px 15px 15px;
-  height: 100%;
-  height: 200px;
-  max-height: 200px;
-  color: #121212;
-  overflow: hidden;
-}
+
 .muuri-item {
   z-index: 1;
 }
@@ -197,12 +225,4 @@ img {
 }
 .muuri-item-hidden {
   z-index: 0;
-}
-
-// -------- MAIN Printable --------
-
-#printable {
-  margin: 20px;
-  display: flex;
-  border: grey 1px dotted;
 }

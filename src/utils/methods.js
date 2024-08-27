@@ -27,35 +27,36 @@ export const updateColor = (id, newColor) => {
 };
 
 export const muuriLayout = (grid, layoutId, items, width, height, callback) => {
-  var layout = {
+  const layout = {
     id: layoutId,
     items: items,
     slots: [],
     styles: {},
   };
 
-  var item;
-  var m;
-  var x = 0;
-  var y = 0;
-  var w = 0;
-  var h = 0;
+  let item;
+  let m;
+  let x = 0;
+  let y = 0;
+  let w = 0;
+  let h = 0;
 
-  var maxW = width / 2;
-  var currentW = 0;
-  var currentRowH = 0;
-  var currentRowW = 0;
-  var rowSizes = [];
-  var rowFixes = [];
+  let maxW = width / 2;
+  let currentW = 0;
+  let currentRowH = 0;
+  let currentRowW = 0;
+  let rowSizes = [];
+  let rowFixes = [];
 
-  var xPre, yPre, wPre, hPre;
-  var numToFix = 0;
+  let xPre, yPre, wPre, hPre;
+  let numToFix = 0;
 
-  for (var i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length; i++) {
     item = items[i];
 
     m = item.getMargin();
     wPre = item.getWidth() + m.left + m.right;
+
     hPre = item.getHeight() + m.top + m.bottom;
     xPre += wPre;
 
@@ -71,9 +72,9 @@ export const muuriLayout = (grid, layoutId, items, width, height, callback) => {
     numToFix++;
     currentW += wPre;
 
-    var k = 0;
+    let k = 0;
 
-    for (var j = 0; j < numToFix; j++) {
+    for (let j = 0; j < numToFix; j++) {
       rowSizes[i - j] -= wPre / 2;
     }
 
@@ -101,7 +102,7 @@ export const muuriLayout = (grid, layoutId, items, width, height, callback) => {
   currentRowH = 0;
   currentRowW = 0;
 
-  for (var i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length; i++) {
     item = items[i];
     x += w;
 
@@ -121,15 +122,14 @@ export const muuriLayout = (grid, layoutId, items, width, height, callback) => {
       x = 0;
       currentW = 0;
     }
-
     m = item.getMargin();
-    w = item.getWidth() + m.left + m.right;
+    w = item.getWidth() + m.left + m.right - 2;
     h = item.getHeight() + m.top + m.bottom;
-    layout.slots.push(x + rowSizes[i], y);
+
+    layout.slots.push(x, y);
   }
 
-  layout.styles.width = "100%";
+  layout.styles.width = "calc(100%)";
   layout.styles.height = y + h + 1 + "px";
-
   callback(layout);
 };
