@@ -1,37 +1,63 @@
 import { useCallback, useState, useEffect, useRef } from "react";
-import AddItem from "./components/AddItem";
-import Note from "./components/Note";
+
+// components
 import Player from "./components/Player";
+import Sidebar from "./components/Sidebar";
+
 import { MuuriComponent } from "muuri-react";
-import { getData, updateLocalStorageData, muuriLayout } from "./utils/methods";
+import {
+  getData,
+  updateLocalStorageData,
+  muuriLayout,
+  muuriLayout2,
+} from "./utils/methods";
 import "./App.scss";
 
 import dataTest from "./test/dataTest";
+import dataTestStaff from "./test/dataTestStaff";
 
 function App() {
-  const [data, setData] = useState(dataTest);
-  const [format, setFormat] = useState("format-a3");
+  // data
+  const [dataPlayers, setDataPlayers] = useState(dataTest);
+  const [dataStaff, setDataStaff] = useState(dataTestStaff);
 
+  // format
   const printableRef = useRef(null); // Créer une référence au div
-
+  const [format, setFormat] = useState("format-a3");
   const [printableHeight, setPrintableHeight] = useState(0); // Stocker la hauteur du div
+  const [printableWidth, setPrintableWidth] = useState(0);
+
+  // data infos
+  const [eventName, setEventName] = useState("Event Name");
+  const [teamName, setTeamName] = useState("Team Name");
+  const [teamLogo, setTeamLogo] = useState({});
 
   useEffect(() => {
     // Récupérer la hauteur du div après le montage du composant
     if (printableRef.current) {
       setPrintableHeight(printableRef.current.clientHeight);
+      setPrintableWidth(printableRef.current.clientWidth);
     }
   }, []);
 
   const updateData = useCallback(() => {
-    setData(getData());
+    setDataPlayers(getData());
   }, []);
 
-  const reorder = (newItemsOrder) => {
+  const updateDataStaff = useCallback(() => {
+    setDataStaff(getData());
+  }, []);
+
+  const reorder = (newItemsOrder, data) => {
     const items = newItemsOrder
       .map((item) => item._component.key)
       .map((id) => data.find((obj) => obj.id === +id));
-    setData(items);
+    if (data === dataPlayers) {
+      setDataPlayers(items);
+    } else {
+      setDataStaff(items);
+    }
+
     updateLocalStorageData(items);
   };
 
@@ -55,52 +81,75 @@ function App() {
       return 0;
     });
   };
-  console.log("orderPlayers >", orderPlayers(data));
+  //console.log("orderPlayers >", orderPlayers(data));
 
   return (
-    <div className="container">
-      <header>
-        <h1>Roster generator</h1>
-      </header>
+    <>
+      <Sidebar />
+      <div className="container-main">
+        {/* <AddItem updateParentData={updateData} /> */}
 
-      {/* <AddItem updateParentData={updateData} /> */}
-
-      <main className={`printable ${format}`}>
-        <div className="top-roster">
-          <h2 className="event-name">Event Name</h2>
-          <div className="team-container">
-            <h3 className="team-name">Team name</h3>
-            <div className="logo-team-container">
-              <p>X</p>
+        <main
+          className={`printable ${format} template-1`}
+          style={{ height: `calc(${printableWidth} * (1/ 1.141))` }}
+        >
+          <div className="top-roster">
+            <h2 className="event-name">{eventName}</h2>
+            <div className="team-container">
+              <h3 className="team-name">{teamName}</h3>
+              <div className="logo-team-container">
+                <p>X</p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <MuuriComponent
-          ref={printableRef}
-          className={`printable ${format}`}
-          dragEnabled
-          layout={muuriLayout}
-          onDragEnd={(e) => {
-            reorder(e.getGrid().getItems());
-          }}
-        >
-          {orderPlayers(data).map((item, index) => (
-            <Player
-              id={item.id}
-              key={item.id}
-              {...{ item, updateData, printableHeight }}
-              index={index}
-            />
-          ))}
-        </MuuriComponent>
-        {!!!data.length && (
-          <p data-aos="zoom-in" className="empty-list-pragraph">
-            No Notes To Show
-          </p>
-        )}
-      </main>
-    </div>
+          <MuuriComponent
+            ref={printableRef}
+            dragEnabled
+            id={"PLAYERS"}
+            layout={muuriLayout}
+            onDragEnd={(e) => {
+              reorder(e.getGrid().getItems(), dataPlayers);
+            }}
+          >
+            {orderPlayers(dataPlayers)
+              .filter((el) => el.status === "player")
+              .map((item, index) => (
+                <Player
+                  id={item.id}
+                  key={item.id}
+                  {...{ item, updateData, printableHeight }}
+                  index={index}
+                />
+              ))}
+          </MuuriComponent>
+          <MuuriComponent
+            dragEnabled
+            id={"STAFF"}
+            layout={muuriLayout2}
+            onDragEnd={(e) => {
+              reorder(e.getGrid().getItems(), dataStaff);
+            }}
+          >
+            {dataStaff
+              .filter((el) => el.status !== "player")
+              .map((item, index) => (
+                <Player
+                  id={item.id}
+                  key={item.id}
+                  {...{ item, updateDataStaff, printableHeight }}
+                  index={index}
+                />
+              ))}
+          </MuuriComponent>
+          {!dataPlayers.length && !dataStaff.length && (
+            <p data-aos="zoom-in" className="empty-list-pragraph">
+              No Player To Show
+            </p>
+          )}
+        </main>
+      </div>
+    </>
   );
 }
 

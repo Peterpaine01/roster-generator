@@ -1,3 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,400;0,600;0,700;1,400;1,600;1,700&display=swap");
+
+// Variables
+$color-primary: #2bfed4;
+$font-main: "Kanit", sans-serif;
+
 * {
   padding: 0;
   margin: 0;
@@ -26,11 +32,40 @@
 }
 
 body {
-  min-height: 100vh;
+  //min-height: 100vh;
+  font-family: $font-main;
+  font-weight: 400;
+}
+
+.container-main {
+  padding: 40px 100px;
+  padding-left: 180px;
 }
 
 .container {
   padding: 40px 100px;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
 }
 
 header {
@@ -128,6 +163,147 @@ img {
   width: 100%;
 }
 
+// -------- SIDEBAR --------
+
+.sidebar {
+  display: block;
+  width: 100px;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 100;
+  background-color: $color-primary;
+  font-family: $font-main;
+  transition: all 0.2s ease-in-out;
+  .top-sidebar {
+    padding: 20px;
+    margin-top: 2vw;
+    display: flex;
+    align-items: center;
+  }
+  h1 {
+    display: flex;
+    overflow: hidden;
+    font-weight: 600;
+    align-items: center;
+    width: 60px;
+    transition: all 0.2s ease-in-out;
+    i {
+      background-color: #0a7e67;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 60px;
+      height: 60px;
+      color: #ffffff;
+      font-size: 2vw;
+    }
+    span {
+      display: flex;
+      opacity: 0;
+      padding: 10px 0;
+      color: #121212;
+      height: 60px;
+      align-items: center;
+      font-size: 2vw;
+      width: calc(100% - 60px);
+      overflow: hidden;
+    }
+  }
+}
+
+.btn-open {
+  right: -15px;
+  top: -15px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 50%;
+  border: $color-primary 2px solid;
+  text-decoration: none;
+  color: $color-primary;
+  i {
+    transform: rotate(0);
+    transition: all 0.3s ease-in-out;
+  }
+}
+
+.sidebar.open {
+  width: 20%;
+  transition: all 0.1s ease-in-out;
+  h1 {
+    width: 100%;
+    transition: all 0.1s ease-in-out;
+    span {
+      opacity: 1;
+      transition: all 0.3s ease-in-out;
+      padding: 10px;
+    }
+  }
+
+  .btn-menu {
+    width: 100%;
+    transition: all 0.1s ease-in-out;
+    span {
+      opacity: 1;
+      transition: all 0.3s ease-in-out;
+      padding: 10px;
+    }
+  }
+  .btn-open {
+    i {
+      transform: rotate(-180deg);
+      transition: all 0.3s ease-in-out;
+    }
+  }
+}
+
+.navbar-container {
+  gap: 10px;
+  margin: 20px 0;
+  padding: 20px;
+  margin-top: 1vw;
+  .btn-menu {
+    border-radius: 5px;
+    text-decoration: none;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    //border: 2px dotted lighten($color-primary, 40%);
+    background-color: lighten($color-primary, 20%);
+    width: 60px;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      //border: 2px solid lighten($color-primary, 50%);
+      background-color: lighten($color-primary, 40%);
+      transition: all 0.2s ease-in-out;
+    }
+    i {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 60px;
+      height: 60px;
+      color: #121212;
+      font-size: 2vw;
+    }
+    span {
+      display: flex;
+      opacity: 0;
+      padding: 10px 0;
+      color: #121212;
+      height: 60px;
+      align-items: center;
+      width: calc(100% - 60px);
+      overflow: hidden;
+    }
+  }
+}
+
 // -------- MAIN Printable --------
 
 .printable {
@@ -137,14 +313,18 @@ img {
   flex-direction: column;
   border: grey 1px dotted;
   box-shadow: 0px 0px 20px #12121239;
+  position: relative;
   > div {
     border: 1px solid red;
+  }
+  > :nth-last-child(1) {
+    border: 1px solid blue;
   }
 }
 
 .format-a3 {
   width: 100%;
-  aspect-ratio: 1/1.414;
+  //aspect-ratio: 1/1.414;
 }
 
 .muuri {
@@ -169,11 +349,13 @@ img {
 }
 
 .template-1 {
-  background-color: aquamarine;
-  //box-shadow: 5px 5px 10px #12121270;
-  border-radius: 10px;
-  color: #121212;
-  overflow: hidden;
+  .item {
+    background-color: aquamarine;
+    //box-shadow: 5px 5px 10px #12121270;
+    border-radius: 10px;
+    color: #121212;
+    overflow: hidden;
+  }
 
   .item-content {
     position: relative;
@@ -198,6 +380,12 @@ img {
     position: absolute;
     top: 5%;
     right: 5%;
+  }
+  .event-name {
+    font-size: 2vw;
+  }
+  .team-name {
+    font-size: 6vw;
   }
 }
 
