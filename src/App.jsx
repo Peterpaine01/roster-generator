@@ -3,6 +3,7 @@ import { useCallback, useState, useEffect, useRef } from "react";
 // components
 import Player from "./components/Player";
 import Sidebar from "./components/Sidebar";
+import CustomizeRoster from "./components/CustomizeRoster";
 
 import { MuuriComponent } from "muuri-react";
 import {
@@ -23,14 +24,28 @@ function App() {
 
   // format
   const printableRef = useRef(null); // Créer une référence au div
-  const [format, setFormat] = useState("format-a3");
   const [printableHeight, setPrintableHeight] = useState(0); // Stocker la hauteur du div
   const [printableWidth, setPrintableWidth] = useState(0);
 
-  // data infos
+  // customize roster
+  const [format, setFormat] = useState("format-a3");
   const [eventName, setEventName] = useState("Event Name");
   const [teamName, setTeamName] = useState("Team Name");
   const [teamLogo, setTeamLogo] = useState({});
+  const [bgImage, setBgImage] = useState();
+  const [bgColor, setBgColor] = useState("#ffffff");
+  const [rosterData, setRosterData] = useState({
+    eventName: "Event Name",
+    teamName: "Team Name",
+    teamLogo: {},
+    format: "format-a3",
+    bgImage: "",
+    bgColor: "#ffffff",
+  });
+
+  // Modals
+  const [openModal, setOpenModal] = useState();
+  const [contentModal, setContentModal] = useState();
 
   useEffect(() => {
     // Récupérer la hauteur du div après le montage du composant
@@ -85,10 +100,41 @@ function App() {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar
+        setOpenModal={setOpenModal}
+        setContentModal={setContentModal}
+        openModal={openModal}
+      />
       <div className="container-main">
         {/* <AddItem updateParentData={updateData} /> */}
-
+        {/* Begin modal */}
+        <div className={`modal-container ${openModal}`}>
+          <div
+            className="overlay modal-trigger"
+            onClick={() => {
+              setOpenModal("");
+              setContentModal("");
+            }}
+          ></div>
+          <div className="modal">
+            <button
+              className="close-modal modal-trigger"
+              onClick={() => {
+                setOpenModal("");
+                setContentModal("");
+              }}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+            {contentModal === "customize" && (
+              <CustomizeRoster
+                setRosterData={setRosterData}
+                rosterData={rosterData}
+              />
+            )}
+          </div>
+        </div>
+        {/* End modal */}
         <main
           className={`printable ${format} template-1`}
           style={{ height: `calc(${printableWidth} * (1/ 1.141))` }}

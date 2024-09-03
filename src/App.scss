@@ -414,3 +414,65 @@ img {
 .muuri-item-hidden {
   z-index: 0;
 }
+
+// -------- MODAL --------
+
+.modal-container {
+  background-color: white;
+  width: calc(100% - 160px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  visibility: hidden;
+  transition: visibility 0.4s;
+  &.active {
+    visibility: visible;
+    .overlay {
+      opacity: 1;
+      transition: opacity 0.4s ease-out;
+    }
+    .modal {
+      opacity: 1;
+      transform: translate(-50%, 0);
+      transition: opacity 0.4s 0.2 ease-out, transform 0.4s 0.2 ease-out;
+    }
+  }
+}
+
+.overlay {
+  z-index: 50;
+  opacity: 0;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: #333333d3;
+  transition: opacity 0.4s 0.2s ease-out;
+}
+
+.modal {
+  opacity: 0;
+  width: calc(100% - 180px);
+  overflow: scroll;
+  padding: 15px;
+  min-width: 300px;
+  background: #fff;
+  border-radius: 10px;
+  position: absolute;
+  top: calc(50vh - 120px);
+  left: calc(50% + 120px);
+  z-index: 300;
+  transform: translate(-50%, 0);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.content-modal {
+  padding: 20px 20px;
+  gap: 20px;
+  font-family: $font-main;
+  p {
+    margin-bottom: 10px;
+  }
+  .block-input {
+  }
+}

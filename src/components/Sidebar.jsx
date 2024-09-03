@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Sidebar() {
+function Sidebar({ setOpenModal, openModal, setContentModal }) {
   const [isOpen, setIsOpen] = useState("close");
 
   // Fonction pour gérer le clic sur le bouton
@@ -9,21 +9,29 @@ function Sidebar() {
     setIsOpen(isOpen === "open" ? "close" : "open");
   };
 
-  console.log("open >", isOpen);
+  console.log("openModal >", openModal);
   return (
     <div className={`sidebar ${isOpen} fixed`}>
       <div className="top-sidebar relative">
         <a href="" className="btn-open absolute" onClick={handleButtonClick}>
-          <i class="fa-solid fa-chevron-right"></i>
+          <i className="fa-solid fa-chevron-right"></i>
         </a>
         <h1>
-          <i class="fa-solid fa-rotate-left"></i>
+          <i className="fa-solid fa-rotate-left"></i>
           <span>Roster generator</span>
         </h1>
       </div>
 
       <div className="navbar-container flex-column">
-        <a href="" className="btn-menu">
+        <a
+          href=""
+          className="btn-menu"
+          onClick={(event) => {
+            event.preventDefault();
+            setOpenModal(openModal !== "active" ? "active" : "");
+            setContentModal("customize");
+          }}
+        >
           <i className="fa-solid fa-brush"></i>
           <span>customize the roster</span>
         </a>
@@ -36,7 +44,7 @@ function Sidebar() {
           <span>preview roster</span>
         </a>
         <a href="" className="btn-menu">
-          <i class="fa-solid fa-file-export"></i>
+          <i className="fa-solid fa-file-export"></i>
           <span>export roster</span>
         </a>
       </div>
