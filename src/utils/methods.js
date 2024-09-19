@@ -1,21 +1,203 @@
 export const getData = () => {
-  return JSON.parse(localStorage.getItem("items")) || [];
+  const dataStored = localStorage.getItem("rosterData");
+  const data = {
+    eventName: "Event Name",
+    teamName: "Team Name",
+    teamLogo:
+      "https://res.cloudinary.com/djxejhaxr/image/upload/v1726572044/easy-roster/logo-easy-rider-r_glyrwq.svg",
+    format: "format-a3",
+    template: "default",
+    color: "#000",
+    bgImage: "",
+    bgColor: "#ffffff",
+    displayPronouns: true,
+    players: [
+      {
+        name: "player 1",
+        number: "01",
+        photo: {},
+        role: "captain",
+        status: "player",
+        pronouns: "elle",
+        id: 0,
+      },
+      {
+        name: "player 2",
+        number: "11",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "ael",
+        id: 1,
+      },
+      {
+        name: "player 3",
+        number: "015",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "il",
+        id: 2,
+      },
+      {
+        name: "player 4",
+        number: "69",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "elle",
+        id: 3,
+      },
+      {
+        name: "player 5",
+        number: "48",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "elle",
+        id: 4,
+      },
+      {
+        name: "player 6",
+        number: "333",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "elle",
+        id: 5,
+      },
+      {
+        name: "player 7",
+        number: "299",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "il",
+        id: 6,
+      },
+      {
+        name: "player 8",
+        number: "25",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "il",
+        id: 7,
+      },
+      {
+        name: "player 9",
+        number: "9999",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "elle",
+        id: 8,
+      },
+      {
+        name: "player 10",
+        number: "1999",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "elle",
+        id: 9,
+      },
+      {
+        name: "player 11",
+        number: "42",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "elle",
+        id: 10,
+      },
+      {
+        name: "player 12",
+        number: "21",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "elle",
+        id: 11,
+      },
+      {
+        name: "player 13",
+        number: "55",
+        photo: {},
+        role: "captain",
+        status: "player",
+        pronouns: "elle",
+        id: 12,
+      },
+      {
+        name: "player 14",
+        number: "39",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "elle",
+        id: 13,
+      },
+      {
+        name: "player 15",
+        number: "55",
+        photo: {},
+        role: "captain",
+        status: "player",
+        pronouns: "elle",
+        id: 14,
+      },
+      {
+        name: "player 16",
+        number: "39",
+        photo: {},
+        role: "",
+        status: "player",
+        pronouns: "elle",
+        id: 15,
+      },
+    ],
+    staff: [
+      {
+        name: "Bench",
+        number: "",
+        photo: {},
+        role: "bench",
+        status: "staff",
+        pronouns: "elle",
+        id: 0,
+      },
+    ],
+  };
+  //console.log("dataStored >", JSON.parse(dataStored));
+
+  return dataStored && dataStored !== "undefined"
+    ? JSON.parse(dataStored)
+    : data;
+  //return data;
 };
 
-export const updateLocalStorageData = (dataList) => {
-  localStorage.setItem("items", JSON.stringify(dataList));
+export const updateLocalStorageData = (data) => {
+  localStorage.setItem("rosterData", JSON.stringify(data));
 };
 
-export const addItem = (item) => {
+export const addItem = (item, type) => {
   let data = getData();
-  item.id = data.reduce((a, obj) => (a > obj.id ? a : obj.id), 0) + 1;
-  data.push(item);
+  console.log("data >", data);
+  console.log("data players >", data[type]);
+
+  item.id = data[type].reduce((a, obj) => (a > obj.id ? a : obj.id), 0) + 1;
+  data[type].push(item);
   updateLocalStorageData(data);
+  console.log(
+    "local storage after update >",
+    JSON.parse(localStorage.getItem("rosterData"))
+  );
 };
 
-export const deleteItem = (id) => {
+export const deleteItem = (id, type) => {
   let data = getData();
-  data = data.filter((item) => item.id !== id);
+  data = data[type].filter((item) => item.id !== id);
   updateLocalStorageData(data);
 };
 
@@ -123,7 +305,7 @@ export const muuriLayout = (grid, layoutId, items, width, height, callback) => {
       currentW = 0;
     }
     m = item.getMargin();
-    w = item.getWidth() + m.left + m.right - 2;
+    w = item.getWidth() + m.left + m.right;
     h = item.getHeight() + m.top + m.bottom;
 
     layout.slots.push(x, y);
@@ -131,9 +313,9 @@ export const muuriLayout = (grid, layoutId, items, width, height, callback) => {
 
   const layoutH = currentRowH * 4;
 
-  layout.styles.width = "calc(100%)";
-  layout.styles.height = layoutH + "px";
-  //layout.styles.height = y + h + 1 + "px";
+  layout.styles.width = "100%";
+  //layout.styles.height = layoutH + "px";
+  layout.styles.height = y + h * 4 + 1 + "px";
   callback(layout);
 };
 

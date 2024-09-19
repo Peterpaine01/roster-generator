@@ -9,7 +9,7 @@ function Sidebar({ setOpenModal, openModal, setContentModal }) {
     setIsOpen(isOpen === "open" ? "close" : "open");
   };
 
-  console.log("openModal >", openModal);
+  //console.log("openModal >", openModal);
   return (
     <div className={`sidebar ${isOpen} fixed`}>
       <div className="top-sidebar relative">
@@ -17,8 +17,16 @@ function Sidebar({ setOpenModal, openModal, setContentModal }) {
           <i className="fa-solid fa-chevron-right"></i>
         </a>
         <h1>
-          <i className="fa-solid fa-rotate-left"></i>
-          <span>Roster generator</span>
+          <i>
+            <img
+              src="https://res.cloudinary.com/djxejhaxr/image/upload/v1726660214/easy-roster/logo-easy-rider-mono-w_m3zrjl.svg"
+              alt=""
+            />
+          </i>
+
+          <span>
+            <strong>Easy</strong> Roster
+          </span>
         </h1>
       </div>
 
@@ -35,7 +43,15 @@ function Sidebar({ setOpenModal, openModal, setContentModal }) {
           <i className="fa-solid fa-brush"></i>
           <span>customize the roster</span>
         </a>
-        <a href="" className="btn-menu">
+        <a
+          href=""
+          className="btn-menu"
+          onClick={(event) => {
+            event.preventDefault();
+            setOpenModal(openModal !== "active" ? "active" : "");
+            setContentModal("add");
+          }}
+        >
           <i className="fa-solid fa-user-plus"></i>
           <span>add a player</span>
         </a>

@@ -84,7 +84,7 @@ header {
 .add-item form {
   display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -184,12 +184,13 @@ img {
   h1 {
     display: flex;
     overflow: hidden;
-    font-weight: 600;
+    //font-weight: 600;
     align-items: center;
     width: 60px;
     transition: all 0.2s ease-in-out;
     i {
-      background-color: #0a7e67;
+      background-color: #ff5757;
+      padding: 5px;
       border-radius: 5px;
       display: flex;
       justify-content: center;
@@ -201,14 +202,22 @@ img {
     }
     span {
       display: flex;
+      text-transform: uppercase;
+      font-weight: 400;
+      flex-wrap: wrap;
       opacity: 0;
       padding: 10px 0;
       color: #121212;
       height: 60px;
       align-items: center;
+      justify-content: flex-start;
       font-size: 2vw;
       width: calc(100% - 60px);
       overflow: hidden;
+      strong {
+        display: inline;
+        font-weight: 800;
+      }
     }
   }
 }
@@ -311,14 +320,16 @@ img {
   padding: 40px;
   display: flex;
   flex-direction: column;
-  border: grey 1px dotted;
+  //border: grey 1px dotted;
   box-shadow: 0px 0px 20px #12121239;
   position: relative;
+  background-size: cover;
+
   > div {
-    border: 1px solid red;
+    //border: 1px solid red;
   }
   > :nth-last-child(1) {
-    border: 1px solid blue;
+    //border: 1px solid blue;
   }
 }
 
@@ -329,7 +340,7 @@ img {
 
 .muuri {
   position: relative;
-  padding: 40px;
+  //padding: 40px;
   width: 100%;
 }
 
@@ -339,7 +350,7 @@ img {
   position: absolute;
   z-index: 1;
   width: calc(100% / 5 - 20px);
-  aspect-ratio: 1/1.414;
+  aspect-ratio: 1/1.35;
   cursor: grab;
   margin: 10px;
 }
@@ -349,6 +360,36 @@ img {
 }
 
 .template-1 {
+  font-family: $font-main;
+  .top-roster {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0;
+    gap: 2vw;
+  }
+  .text-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .logo-team-container {
+    width: 10vw;
+    height: 10vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .event-name {
+    font-size: 2vw;
+  }
+  .team-name {
+    font-size: 6vw;
+  }
   .item {
     background-color: aquamarine;
     //box-shadow: 5px 5px 10px #12121270;
@@ -381,12 +422,6 @@ img {
     top: 5%;
     right: 5%;
   }
-  .event-name {
-    font-size: 2vw;
-  }
-  .team-name {
-    font-size: 6vw;
-  }
 }
 
 .color-picker-container {
@@ -418,11 +453,17 @@ img {
 // -------- MODAL --------
 
 .modal-container {
-  background-color: white;
-  width: calc(100% - 160px);
+  width: calc(100% - 100px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
+  margin-left: 100px;
+  padding: 15vw;
   top: 0;
   left: 0;
+  bottom: 0;
+  right: 0;
   z-index: 50;
   visibility: hidden;
   transition: visibility 0.4s;
@@ -434,8 +475,8 @@ img {
     }
     .modal {
       opacity: 1;
-      transform: translate(-50%, 0);
-      transition: opacity 0.4s 0.2 ease-out, transform 0.4s 0.2 ease-out;
+      //transform: translate(-50%, 0);
+      //transition: opacity 0.4s 0.2 ease-out, transform 0.4s 0.2 ease-out;
     }
   }
 }
@@ -452,17 +493,18 @@ img {
 
 .modal {
   opacity: 0;
-  width: calc(100% - 180px);
+  width: 100%;
   overflow: scroll;
   padding: 15px;
   min-width: 300px;
+  max-height: calc(100vh - 80px);
   background: #fff;
   border-radius: 10px;
-  position: absolute;
-  top: calc(50vh - 120px);
-  left: calc(50% + 120px);
+  //position: absolute;
+  //top: calc(50vh - 120px);
+  //left: calc(50% + 120px);
   z-index: 300;
-  transform: translate(-50%, 0);
+  //transform: translate(-50%, 0);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
 

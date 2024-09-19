@@ -4,6 +4,7 @@ import { useCallback, useState, useEffect, useRef } from "react";
 import Player from "./components/Player";
 import Sidebar from "./components/Sidebar";
 import CustomizeRoster from "./components/CustomizeRoster";
+import AddItem from "./components/AddItem";
 
 import { MuuriComponent } from "muuri-react";
 import {
@@ -34,14 +35,7 @@ function App() {
   const [teamLogo, setTeamLogo] = useState({});
   const [bgImage, setBgImage] = useState();
   const [bgColor, setBgColor] = useState("#ffffff");
-  const [rosterData, setRosterData] = useState({
-    eventName: "Event Name",
-    teamName: "Team Name",
-    teamLogo: {},
-    format: "format-a3",
-    bgImage: "",
-    bgColor: "#ffffff",
-  });
+  const [rosterData, setRosterData] = useState(getData());
 
   // Modals
   const [openModal, setOpenModal] = useState();
@@ -49,31 +43,45 @@ function App() {
 
   useEffect(() => {
     // Récupérer la hauteur du div après le montage du composant
+    updatePrintableDimensions();
+
+    const savedBgImage = localStorage.getItem("uploadedBgImage");
+    if (savedBgImage) {
+      setRosterData({ ...rosterData, bgImage: savedBgImage });
+    }
+
+    // Ajouter l'événement pour écouter les changements de taille de la fenêtre
+    window.addEventListener("resize", updatePrintableDimensions);
+
+    // Nettoyage lors du démontage du composant
+    return () => {
+      window.removeEventListener("resize", updatePrintableDimensions);
+    };
+  }, []);
+
+  // Fonction pour mettre à jour la largeur de la div
+  const updatePrintableDimensions = () => {
     if (printableRef.current) {
-      setPrintableHeight(printableRef.current.clientHeight);
+      setPrintableHeight(printableRef.current.clientWidth * 1.4142);
       setPrintableWidth(printableRef.current.clientWidth);
     }
-  }, []);
+  };
 
   const updateData = useCallback(() => {
-    setDataPlayers(getData());
+    setRosterData(getData());
   }, []);
 
-  const updateDataStaff = useCallback(() => {
-    setDataStaff(getData());
-  }, []);
-
-  const reorder = (newItemsOrder, data) => {
+  const reorder = (newItemsOrder, data, type) => {
     const items = newItemsOrder
       .map((item) => item._component.key)
       .map((id) => data.find((obj) => obj.id === +id));
-    if (data === dataPlayers) {
-      setDataPlayers(items);
-    } else {
-      setDataStaff(items);
-    }
+    console.log("items >", items);
 
-    updateLocalStorageData(items);
+    let updateItems = {};
+    type === "players"
+      ? (updateItems = { ...rosterData, players: items })
+      : (updateItems = { ...rosterData, staff: items });
+    updateLocalStorageData(updateItems);
   };
 
   const orderPlayers = (array) => {
@@ -96,7 +104,16 @@ function App() {
       return 0;
     });
   };
-  //console.log("orderPlayers >", orderPlayers(data));
+
+  const handleDelete = () => {
+    localStorage.removeItem("rosterData");
+    updateData();
+    alert("Data reseted !");
+  };
+
+  //console.log("rosterData >", rosterData);
+  console.log("height >", printableHeight);
+  console.log("printableWidth >", printableWidth);
 
   return (
     <>
@@ -130,37 +147,55 @@ function App() {
               <CustomizeRoster
                 setRosterData={setRosterData}
                 rosterData={rosterData}
+                updateData={updateData}
+                updateLocalStorageData={updateLocalStorageData}
+              />
+            )}
+            {contentModal === "add" && (
+              <AddItem
+                setRosterData={setRosterData}
+                rosterData={rosterData}
+                updateData={updateData}
               />
             )}
           </div>
         </div>
         {/* End modal */}
+        <button onClick={handleDelete}>Reset data</button>
         <main
-          className={`printable ${format} template-1`}
-          style={{ height: `calc(${printableWidth} * (1/ 1.141))` }}
+          ref={printableRef}
+          className={`printable ${rosterData.format} template-1`}
+          style={{
+            height: printableHeight,
+            backgroundImage: `url(${rosterData.bgImage})`,
+            backgroundColor: rosterData.bgColor,
+            color: rosterData.textColor,
+          }}
         >
           <div className="top-roster">
-            <h2 className="event-name">{eventName}</h2>
-            <div className="team-container">
-              <h3 className="team-name">{teamName}</h3>
-              <div className="logo-team-container">
-                <p>X</p>
-              </div>
+            <div className="logo-team-container">
+              <img
+                src={rosterData.teamLogo}
+                alt={`${rosterData.teamName} logo`}
+              />
+            </div>
+            <div className="text-container">
+              <h2 className="event-name">{rosterData.eventName}</h2>
+              <h3 className="team-name">{rosterData.teamName}</h3>
             </div>
           </div>
 
           <MuuriComponent
-            ref={printableRef}
             dragEnabled
             id={"PLAYERS"}
             layout={muuriLayout}
             onDragEnd={(e) => {
-              reorder(e.getGrid().getItems(), dataPlayers);
+              reorder(e.getGrid().getItems(), rosterData.players, "players");
+              //console.log("onDrag", e.getGrid().getItems());
             }}
           >
-            {orderPlayers(dataPlayers)
-              .filter((el) => el.status === "player")
-              .map((item, index) => (
+            {rosterData.players &&
+              rosterData.players.map((item, index) => (
                 <Player
                   id={item.id}
                   key={item.id}
@@ -174,25 +209,24 @@ function App() {
             id={"STAFF"}
             layout={muuriLayout2}
             onDragEnd={(e) => {
-              reorder(e.getGrid().getItems(), dataStaff);
+              reorder(e.getGrid().getItems(), rosterData.staff, "staff");
             }}
           >
-            {dataStaff
-              .filter((el) => el.status !== "player")
-              .map((item, index) => (
+            {rosterData.staff &&
+              rosterData.staff.map((item, index) => (
                 <Player
                   id={item.id}
                   key={item.id}
-                  {...{ item, updateDataStaff, printableHeight }}
+                  {...{ item, updateData, printableHeight }}
                   index={index}
                 />
               ))}
           </MuuriComponent>
-          {!dataPlayers.length && !dataStaff.length && (
+          {/* {!dataPlayers.length && !dataStaff.length && (
             <p data-aos="zoom-in" className="empty-list-pragraph">
               No Player To Show
             </p>
-          )}
+          )} */}
         </main>
       </div>
     </>
