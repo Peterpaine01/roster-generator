@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 
-function Sidebar({ setOpenModal, openModal, setContentModal }) {
+function Sidebar({
+  setOpenModal,
+  openModal,
+  setContentModal,
+  handleExportPDF,
+}) {
   const [isOpen, setIsOpen] = useState("close");
 
   // Fonction pour gérer le clic sur le bouton
@@ -59,10 +64,10 @@ function Sidebar({ setOpenModal, openModal, setContentModal }) {
           <i className="fa-solid fa-eye"></i>
           <span>preview roster</span>
         </a>
-        <a href="" className="btn-menu">
+        <button href="" className="btn-menu" onClick={handleExportPDF}>
           <i className="fa-solid fa-file-export"></i>
           <span>export roster</span>
-        </a>
+        </button>
       </div>
     </div>
   );
