@@ -5,6 +5,7 @@ function Sidebar({
   openModal,
   setContentModal,
   handleExportPDF,
+  handleExportFlatPDF,
 }) {
   const [isOpen, setIsOpen] = useState("close");
 
@@ -46,7 +47,10 @@ function Sidebar({
           }}
         >
           <i className="fa-solid fa-brush"></i>
-          <span>customize the roster</span>
+          <span>
+            customize <br />
+            the roster
+          </span>
         </a>
         <a
           href=""
@@ -60,11 +64,15 @@ function Sidebar({
           <i className="fa-solid fa-user-plus"></i>
           <span>add a player</span>
         </a>
-        <a href="" className="btn-menu">
+        {/* <a href="" className="btn-menu">
           <i className="fa-solid fa-eye"></i>
           <span>preview roster</span>
-        </a>
-        <button href="" className="btn-menu" onClick={handleExportPDF}>
+        </a> */}
+        {/* <button className="btn-menu" onClick={handleExportPDF}>
+          <i className="fa-solid fa-file-export"></i>
+          <span>export roster</span>
+        </button> */}
+        <button className="btn-menu" onClick={handleExportFlatPDF}>
           <i className="fa-solid fa-file-export"></i>
           <span>export roster</span>
         </button>

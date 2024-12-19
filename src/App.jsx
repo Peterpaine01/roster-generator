@@ -1,6 +1,8 @@
 import { useCallback, useState, useEffect, useRef } from "react";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+//import html2pdf from "html2pdf.js";
+import html2canvas from "html2canvas";
 
 // components
 import Player from "./components/Player";
@@ -109,7 +111,6 @@ function App() {
 
   const handleExportPDF = () => {
     const element = printableRef.current;
-    console.log(element);
 
     if (element) {
       // Obtenir la largeur et la hauteur de l'élément
@@ -157,15 +158,46 @@ function App() {
     }
   };
 
+  const handleExportFlatPDF = async () => {
+    const element = printableRef.current;
+
+    if (element) {
+      // Utiliser html2canvas pour capturer une capture d'écran de l'élément
+      const canvas = await html2canvas(element, {
+        scale: 2, // Pour une meilleure résolution
+        useCORS: true, // Prend en charge les images provenant de domaines externes
+        logging: false,
+      });
+
+      // Obtenir les dimensions du canvas
+      const imgData = canvas.toDataURL("image/png", 0.8);
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+
+      // Convertir les dimensions du canvas en points pour jsPDF (1 pt = 1/72 inch)
+      const pdfWidth = imgWidth * 0.75;
+      const pdfHeight = imgHeight * 0.75;
+
+      // Créer un nouveau PDF
+      const pdf = new jsPDF({
+        orientation: pdfWidth > pdfHeight ? "landscape" : "portrait",
+        unit: "pt",
+        format: [pdfWidth, pdfHeight], // Utiliser les dimensions de l'image
+      });
+
+      // Ajouter l'image dans le PDF (l'image couvre toute la page)
+      pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+
+      // Télécharger le PDF aplati
+      pdf.save("roster-exported-html2canvas.pdf");
+    }
+  };
+
   const handleDelete = () => {
     localStorage.removeItem("rosterData");
     updateData();
     alert("Data reseted !");
   };
-
-  //console.log("rosterData >", rosterData);
-  //console.log("height >", printableHeight);
-  //console.log("printableWidth >", printableWidth);
 
   return (
     <>
@@ -174,6 +206,7 @@ function App() {
         setContentModal={setContentModal}
         openModal={openModal}
         handleExportPDF={handleExportPDF}
+        handleExportFlatPDF={handleExportFlatPDF}
       />
       <div className="container-main">
         {/* <AddItem updateParentData={updateData} /> */}
@@ -223,28 +256,29 @@ function App() {
             style={{
               height: printableHeight,
               backgroundImage: `url(${rosterData.bgImage})`,
-              //backgroundColor: rosterData.bgColor,
+              backgroundColor: rosterData.bgColor,
               color: rosterData.textColor,
             }}
           >
             <div className="top-roster">
               <div className="logo-team-container">
-                {/* <img
+                <img
                   src={rosterData.teamLogo}
                   alt={`${rosterData.teamName} logo`}
-                /> */}
-                <img
+                />
+                {/* <img
                   src="https://www.marly-dan.com/cdn/shop/articles/bengal-cat-stands-yellow-bed_1200x.jpg?v=1687272426"
                   //src={Image}
                   alt="Sample"
                   style={{ width: "100%", height: "auto" }}
-                />
+                /> */}
               </div>
               <div className="text-container">
                 <h2 className="event-name">{rosterData.eventName}</h2>
                 <h3 className="team-name">{rosterData.teamName}</h3>
               </div>
             </div>
+
             <MuuriComponent
               dragEnabled
               id={"PLAYERS"}

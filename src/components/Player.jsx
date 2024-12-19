@@ -2,7 +2,11 @@ import React, { useState } from "react";
 
 function Player({ item, printableHeight }) {
   return (
-    <div className="item" style={{ height: `calc(${printableHeight} / 5)` }}>
+    <div
+      className="item"
+      data-id={item.id}
+      style={{ height: `calc(${printableHeight} / 5)` }}
+    >
       <div className="item-content">
         <div className="position-container">
           <p>{item.role === "captain" && "C"}</p>
