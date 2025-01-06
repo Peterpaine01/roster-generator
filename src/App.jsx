@@ -16,6 +16,7 @@ import {
   updateLocalStorageData,
   muuriLayout,
   muuriLayout2,
+  muuriLayout5xHeight,
 } from "./utils/methods";
 import "./App.scss";
 
@@ -61,7 +62,7 @@ function App() {
     return () => {
       window.removeEventListener("resize", updatePrintableDimensions);
     };
-  }, []);
+  }, [rosterData]);
 
   // Fonction pour mettre à jour la largeur de la div
   const updatePrintableDimensions = () => {
@@ -75,7 +76,7 @@ function App() {
     setRosterData(getData());
   }, []);
 
-  const reorder = (newItemsOrder, data, type) => {
+  const reorderPlayer = (newItemsOrder, data, type) => {
     const items = newItemsOrder
       .map((item) => item._component.key)
       .map((id) => data.find((obj) => obj.id === +id));
@@ -109,6 +110,12 @@ function App() {
     });
   };
 
+  const orderStaff = ({ items }) => {
+    // Reverse the array without mutating the original
+    const reversedItems = [...items].reverse();
+    return reversedItems;
+  };
+
   const handleExportPDF = () => {
     const element = printableRef.current;
 
@@ -122,24 +129,24 @@ function App() {
       const pdfWidth = elementWidth * 0.75; // 1 pixel = 0.75 point
       const pdfHeight = elementHeight * 0.75;
 
-      //console.log("pdf dimensions", pdfWidth, pdfHeight);
-
-      //console.log(
-      //   "orientation",
-      //   pdfWidth > pdfHeight ? "landscape" : "portrait"
-      // );
-
       const doc = new jsPDF({
         orientation: elementWidth > elementHeight ? "landscape" : "portrait",
         unit: "pt",
         format: [elementWidth, elementHeight],
       });
 
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[-:]/g, "-")
+        .replace(/[T]/g, "_")
+        .split(".")[0];
+      const filename = `roster_${eventName}_${teamName}_${timestamp}.pdf`;
+
       // Utilise la méthode html() pour exporter tout en gardant le HTML comme structure
       doc.html(element, {
         callback: function (doc) {
           // Une fois le contenu ajouté, le PDF est téléchargé
-          doc.save("exported-jspdf.pdf");
+          doc.save(filename);
         },
         x: 0,
         y: 0,
@@ -170,7 +177,7 @@ function App() {
       });
 
       // Obtenir les dimensions du canvas
-      const imgData = canvas.toDataURL("image/png", 0.8);
+      const imgData = canvas.toDataURL("image/png", 0.9);
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
 
@@ -193,6 +200,51 @@ function App() {
     }
   };
 
+  const handleExportJPEG = async () => {
+    const element = printableRef.current;
+
+    if (element) {
+      try {
+        // Capture the element using html2canvas
+        const canvas = await html2canvas(element, {
+          scale: 2, // Improve resolution
+          useCORS: true, // Handle cross-origin images
+          logging: false,
+        });
+
+        // Convert canvas to JPEG data URL
+        const imgData = canvas.toDataURL("image/jpeg", 0.9);
+
+        // Create a timestamp for the filename
+        const timestamp = new Date()
+          .toISOString()
+          .replace(/[-:]/g, "-")
+          .replace(/[T]/g, "_")
+          .split(".")[0];
+        const filename = `roster_${eventName}_${teamName}_${timestamp}.jpg`;
+
+        // Create a Blob object from the data URL
+        const blob = await fetch(imgData).then((res) => res.blob());
+        const url = URL.createObjectURL(blob);
+
+        // Trigger download manually
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link); // Ensure it's part of the DOM for the click to work
+        link.click();
+        document.body.removeChild(link); // Clean up DOM after download
+
+        // Revoke the object URL to free memory
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("Error exporting JPEG:", error);
+      }
+    } else {
+      console.error("Target element not found for export.");
+    }
+  };
+
   const handleDelete = () => {
     localStorage.removeItem("rosterData");
     updateData();
@@ -206,7 +258,7 @@ function App() {
         setContentModal={setContentModal}
         openModal={openModal}
         handleExportPDF={handleExportPDF}
-        handleExportFlatPDF={handleExportFlatPDF}
+        handleExportJPEG={handleExportJPEG}
       />
       <div className="container-main">
         {/* <AddItem updateParentData={updateData} /> */}
@@ -249,12 +301,12 @@ function App() {
         {/* End modal */}
         <button onClick={handleDelete}>Reset data</button>
 
-        <main className="printable-contener">
+        <main className={`printable-contener ${rosterData.format}`}>
           <div
             ref={printableRef}
-            className={`printable ${rosterData.format} template-1`}
+            className={`printable template-1`}
             style={{
-              height: printableHeight,
+              // height: printableHeight,
               backgroundImage: `url(${rosterData.bgImage})`,
               backgroundColor: rosterData.bgColor,
               color: rosterData.textColor,
@@ -298,10 +350,12 @@ function App() {
                   />
                 ))}
             </MuuriComponent>
-            {/* <MuuriComponent
+            <MuuriComponent
               dragEnabled
               id={"STAFF"}
-              layout={muuriLayout2}
+              layout={(grid, layoutId, items, width, height, callback) => {
+                muuriLayout2(grid, layoutId, items, width, height, callback);
+              }}
               onDragEnd={(e) => {
                 reorder(e.getGrid().getItems(), rosterData.staff, "staff");
               }}
@@ -315,7 +369,7 @@ function App() {
                     index={index}
                   />
                 ))}
-            </MuuriComponent> */}
+            </MuuriComponent>
             {/* {!dataPlayers.length && !dataStaff.length && (
             <p data-aos="zoom-in" className="empty-list-pragraph">
               No Player To Show

@@ -38,8 +38,13 @@ body {
 }
 
 .container-main {
-  padding: 40px 100px;
+  //padding: 40px 100px;
   padding-left: 180px;
+  padding-bottom: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  //margin: 0 auto;
 }
 
 .container {
@@ -325,12 +330,10 @@ img {
 }
 
 .printable {
-  padding: 40px;
   display: flex;
   flex-direction: column;
   //border: grey 1px dotted;
 
-  position: relative;
   background-size: cover;
 
   > div {
@@ -342,14 +345,20 @@ img {
 }
 
 .format-a3 {
-  width: 100%;
+  width: 1050px;
   //aspect-ratio: 1/1.414;
+  height: 1484.7px;
+}
+
+.format-a3 .printable {
+  padding: 25px 40px;
 }
 
 .muuri {
   position: relative;
   //padding: 40px;
   width: 100%;
+  //border: 1px solid blue;
 }
 
 // -------- CARDS --------
@@ -358,15 +367,16 @@ img {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  justify-content: space-between;
 }
 
 .item {
   position: absolute;
   z-index: 1;
-  width: calc(100% / 5 - 20px);
-  aspect-ratio: 1/1.35;
+  box-sizing: border-box;
+  //border: 1px solid red;
+  //aspect-ratio: 1/1.35;
   cursor: grab;
-  margin: 10px;
 }
 
 .item.muuri-item-hidden {
@@ -401,13 +411,16 @@ img {
 
 .template-1 {
   font-family: $font-main;
+
   .top-roster {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
     margin: 0;
-    gap: 2vw;
+    gap: 20px;
+    padding: 0 10px;
+    margin-bottom: 5px;
   }
   .text-container {
     display: flex;
@@ -417,18 +430,18 @@ img {
     align-items: flex-start;
   }
   .logo-team-container {
-    width: 10vw;
-    height: 10vw;
+    width: 100px;
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
   .event-name {
-    font-size: 2vw;
+    font-size: 24px;
   }
   .team-name {
-    font-size: 6vw;
+    font-size: 60px;
   }
   .item {
     background-color: aquamarine;
@@ -436,6 +449,10 @@ img {
     border-radius: 10px;
     color: #121212;
     //overflow: hidden;
+    width: 171px;
+    // witdth * 1.414
+    height: 244.622px;
+    margin: 11px;
   }
 
   .item-content {

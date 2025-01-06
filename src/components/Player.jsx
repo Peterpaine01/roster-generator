@@ -5,7 +5,7 @@ function Player({ item, printableHeight }) {
     <div
       className="item"
       data-id={item.id}
-      style={{ height: `calc(${printableHeight} / 5)` }}
+      // style={{ height: `calc(${printableHeight} / 5)` }}
     >
       <div className="item-content">
         <div className="position-container">

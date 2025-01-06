@@ -6,6 +6,7 @@ function Sidebar({
   setContentModal,
   handleExportPDF,
   handleExportFlatPDF,
+  handleExportJPEG,
 }) {
   const [isOpen, setIsOpen] = useState("close");
 
@@ -72,7 +73,7 @@ function Sidebar({
           <i className="fa-solid fa-file-export"></i>
           <span>export roster</span>
         </button> */}
-        <button className="btn-menu" onClick={handleExportFlatPDF}>
+        <button className="btn-menu" onClick={handleExportJPEG}>
           <i className="fa-solid fa-file-export"></i>
           <span>export roster</span>
         </button>
