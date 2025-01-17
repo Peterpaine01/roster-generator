@@ -71,6 +71,15 @@ body {
 .flex-column {
   display: flex;
   flex-direction: column;
+  width: 100%;
+}
+
+.open {
+  display: flex;
+}
+
+.close {
+  display: none;
 }
 
 header {
@@ -172,7 +181,7 @@ img {
 
 .sidebar {
   display: block;
-  width: 100px;
+  width: 85px;
   left: 0;
   top: 0;
   height: 100vh;
@@ -180,15 +189,17 @@ img {
   background-color: $color-primary;
   font-family: $font-main;
   transition: all 0.2s ease-in-out;
+
   .top-sidebar {
-    padding: 20px;
-    margin-top: 2vw;
+    padding: 10px 10px 20px;
+    margin-top: 40px;
     display: flex;
     align-items: center;
   }
   h1 {
     display: flex;
     overflow: hidden;
+
     //font-weight: 600;
     align-items: center;
     width: 60px;
@@ -211,25 +222,36 @@ img {
       font-weight: 400;
       flex-wrap: wrap;
       opacity: 0;
-      padding: 10px 0;
+      padding: 0;
       color: #121212;
       height: 60px;
       align-items: center;
       justify-content: flex-start;
-      font-size: 2vw;
+      font-size: 28px;
       width: calc(100% - 60px);
       overflow: hidden;
       strong {
         display: inline;
         font-weight: 800;
+        margin-right: 5px;
       }
     }
   }
 }
 
+.btn-solid {
+  padding: 5px 10px;
+  border: 1px solid white;
+  background-color: #ff5757;
+  border-radius: 5px;
+  color: white;
+  font-family: $font-main;
+  font-size: 16px;
+}
+
 .btn-open {
   right: -15px;
-  top: -15px;
+  top: 5px;
   width: 30px;
   height: 30px;
   display: flex;
@@ -240,6 +262,7 @@ img {
   border: $color-primary 2px solid;
   text-decoration: none;
   color: $color-primary;
+  z-index: 1000;
   i {
     transform: rotate(0);
     transition: all 0.3s ease-in-out;
@@ -248,22 +271,24 @@ img {
 
 .sidebar.open {
   width: 20%;
+  padding: 10px;
   transition: all 0.1s ease-in-out;
   h1 {
     width: 100%;
     transition: all 0.1s ease-in-out;
+    gap: 10px;
     span {
       opacity: 1;
       transition: all 0.3s ease-in-out;
-      padding: 10px;
     }
   }
 
   .btn-menu {
     width: 100%;
     transition: all 0.1s ease-in-out;
-    border: 0;
+
     cursor: pointer;
+    height: 60px;
     span {
       opacity: 1;
       transition: all 0.3s ease-in-out;
@@ -282,19 +307,27 @@ img {
 
 .navbar-container {
   gap: 10px;
-  margin: 20px 0;
-  padding: 20px;
-  margin-top: 1vw;
+  padding: 0px 10px 20px;
+  height: calc(100vh - 140px);
+  overflow-y: scroll;
+  .submit-block {
+    width: 100%;
+  }
+  input[type="submit"] {
+    width: 100%;
+  }
   .btn-menu {
     border-radius: 5px;
     text-decoration: none;
     display: flex;
-    overflow: hidden;
+    border: none;
+    //overflow: hidden;
     align-items: center;
     //border: 2px dotted lighten($color-primary, 40%);
-    background-color: lighten($color-primary, 20%);
+    background-color: #5dddc5;
     width: 60px;
     transition: all 0.2s ease-in-out;
+    cursor: pointer;
     &:hover {
       //border: 2px solid lighten($color-primary, 50%);
       background-color: lighten($color-primary, 40%);
@@ -306,14 +339,14 @@ img {
       align-items: center;
       width: 60px;
       height: 60px;
-      color: #121212;
+      color: rgb(0, 0, 0);
       font-size: 2vw;
     }
     span {
       display: flex;
       opacity: 0;
       padding: 10px 0;
-      color: #121212;
+      color: rgb(0, 0, 0);
       height: 60px;
       align-items: center;
       width: calc(100% - 60px);
@@ -575,4 +608,201 @@ img {
   }
   .block-input {
   }
+}
+
+// ------ Customize roster -------
+
+form.customize {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.block-group {
+  border: 1px solid #ffffff;
+  padding: 20px 10px;
+  border-radius: 5px;
+  width: 100%;
+  h4 {
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+}
+
+.block-input,
+.block-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.block-input-row {
+  flex-direction: row;
+  align-items: center;
+}
+
+input[type="text"],
+select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+input[type="color" i] {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  inline-size: 30px;
+  block-size: 30px;
+  border-radius: 100%;
+  cursor: pointer;
+  color: buttontext;
+  border: 2px solid white;
+}
+
+*:focus {
+  border-radius: 0;
+  outline: none;
+}
+
+::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+::-webkit-color-swatch {
+  border: 0;
+  border-radius: 0;
+}
+
+::-moz-color-swatch,
+::-moz-focus-inner {
+  border: 0;
+}
+
+::-moz-focus-inner {
+  padding: 0;
+}
+
+hr {
+  box-sizing: border-box;
+  border: 0 none transparent;
+  border-top: 1px dotted white;
+  margin: 20px 0;
+}
+
+/* FIX OF UGLY SELECT */
+select {
+  background: white
+    url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>")
+    no-repeat;
+  background-position: calc(100% - 0.75rem) center !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  padding-right: 2rem !important;
+  border-radius: 5px;
+}
+
+.checkbox-wrapper-24 .checkbox {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  text-align: center;
+}
+
+.checkbox-wrapper-24 label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  // display: inline-block;
+  // color: #333;
+  // cursor: pointer;
+  // position: relative;
+}
+.checkbox-wrapper-24 label span {
+  display: inline-block;
+  position: relative;
+  background-color: transparent;
+  width: 20px;
+  height: 20px;
+  transform-origin: center;
+  border: 2px solid #333;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 10px;
+  transition: background-color 150ms 200ms,
+    transform 350ms cubic-bezier(0.78, -1.22, 0.17, 1.89);
+}
+.checkbox-wrapper-24 label span:before {
+  content: "";
+  width: 0px;
+  height: 2px;
+  border-radius: 2px;
+  background: #333;
+  position: absolute;
+  transform: rotate(45deg);
+  top: 8px;
+  left: 5px;
+  transition: width 50ms ease 50ms;
+  transform-origin: 0% 0%;
+}
+.checkbox-wrapper-24 label span:after {
+  content: "";
+  width: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: #333;
+  position: absolute;
+  transform: rotate(305deg);
+  top: 12px;
+  left: 6px;
+  transition: width 50ms ease;
+  transform-origin: 0% 0%;
+}
+.checkbox-wrapper-24 label:hover span:before {
+  width: 5px;
+  transition: width 100ms ease;
+}
+.checkbox-wrapper-24 label:hover span:after {
+  width: 10px;
+  transition: width 150ms ease 100ms;
+}
+
+.checkbox-wrapper-24 input[type="checkbox"] {
+  display: none;
+}
+.checkbox-wrapper-24 input[type="checkbox"]:checked + label span {
+  background-color: #333;
+  transform: scale(1.25);
+}
+.checkbox-wrapper-24 input[type="checkbox"]:checked + label span:after {
+  width: 10px;
+  background: #fff;
+  transition: width 150ms ease 100ms;
+}
+.checkbox-wrapper-24 input[type="checkbox"]:checked + label span:before {
+  width: 5px;
+  background: #fff;
+  transition: width 150ms ease 100ms;
+}
+.checkbox-wrapper-24 input[type="checkbox"]:checked + label:hover span {
+  background-color: #333;
+  transform: scale(1.25);
+}
+.checkbox-wrapper-24 input[type="checkbox"]:checked + label:hover span:after {
+  width: 10px;
+  background: #fff;
+  transition: width 150ms ease 100ms;
+}
+.checkbox-wrapper-24 input[type="checkbox"]:checked + label:hover span:before {
+  width: 5px;
+  background: #fff;
+  transition: width 150ms ease 100ms;
 }

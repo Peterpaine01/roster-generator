@@ -22,6 +22,7 @@ import "./App.scss";
 
 import dataTest from "./test/dataTest";
 import dataTestStaff from "./test/dataTestStaff";
+//import { display } from "html2canvas/dist/types/css/property-descriptors/display";
 
 function App() {
   // data
@@ -245,12 +246,6 @@ function App() {
     }
   };
 
-  const handleDelete = () => {
-    localStorage.removeItem("rosterData");
-    updateData();
-    alert("Data reseted !");
-  };
-
   return (
     <>
       <Sidebar
@@ -259,11 +254,15 @@ function App() {
         openModal={openModal}
         handleExportPDF={handleExportPDF}
         handleExportJPEG={handleExportJPEG}
+        setRosterData={setRosterData}
+        rosterData={rosterData}
+        updateData={updateData}
+        updateLocalStorageData={updateLocalStorageData}
       />
       <div className="container-main">
         {/* <AddItem updateParentData={updateData} /> */}
         {/* Begin modal */}
-        <div className={`modal-container ${openModal}`}>
+        {/* <div className={`modal-container ${openModal}`}>
           <div
             className="overlay modal-trigger"
             onClick={() => {
@@ -297,9 +296,8 @@ function App() {
               />
             )}
           </div>
-        </div>
+        </div> */}
         {/* End modal */}
-        <button onClick={handleDelete}>Reset data</button>
 
         <main className={`printable-contener ${rosterData.format}`}>
           <div
@@ -313,18 +311,15 @@ function App() {
             }}
           >
             <div className="top-roster">
-              <div className="logo-team-container">
-                <img
-                  src={rosterData.teamLogo}
-                  alt={`${rosterData.teamName} logo`}
-                />
-                {/* <img
-                  src="https://www.marly-dan.com/cdn/shop/articles/bengal-cat-stands-yellow-bed_1200x.jpg?v=1687272426"
-                  //src={Image}
-                  alt="Sample"
-                  style={{ width: "100%", height: "auto" }}
-                /> */}
-              </div>
+              {rosterData.displayLogo && (
+                <div className="logo-team-container">
+                  <img
+                    src={rosterData.teamLogo}
+                    alt={`${rosterData.teamName} logo`}
+                  />
+                </div>
+              )}
+
               <div className="text-container">
                 <h2 className="event-name">{rosterData.eventName}</h2>
                 <h3 className="team-name">{rosterData.teamName}</h3>

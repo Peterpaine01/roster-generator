@@ -5,6 +5,7 @@ export const getData = () => {
     teamName: "Team Name",
     teamLogo:
       "https://res.cloudinary.com/djxejhaxr/image/upload/v1726572044/easy-roster/logo-easy-rider-r_glyrwq.svg",
+    displayLogo: true,
     format: "format-a3",
     template: "default",
     color: "#000",
