@@ -65,6 +65,8 @@ function App() {
     };
   }, [rosterData]);
 
+  console.log(rosterData);
+
   // Fonction pour mettre à jour la largeur de la div
   const updatePrintableDimensions = () => {
     if (printableRef.current) {

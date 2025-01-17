@@ -47,6 +47,7 @@ function CustomizeRoster({
       eventName: eventName,
       teamName: teamName,
       teamLogo: teamLogo,
+      displayLogo: displayLogo,
       bgImage: bgImage,
       bgColor: bgColor,
       displayPronouns: displayPronouns,
